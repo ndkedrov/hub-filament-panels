@@ -1,11 +1,11 @@
-@import '../../../support/resources/css/index.css';
-@import '../../../actions/resources/css/index.css';
-@import '../../../forms/resources/css/index.css';
-@import '../../../infolists/resources/css/index.css';
-@import '../../../notifications/resources/css/index.css';
-@import '../../../schemas/resources/css/index.css';
-@import '../../../tables/resources/css/index.css';
-@import '../../../widgets/resources/css/index.css';
+@import '../../../../filament/support/resources/css/index.css';
+@import '../../../hub-filament-actions/resources/css/index.css';
+@import '../../../../filament/forms/resources/css/index.css';
+@import '../../../../filament/infolists/resources/css/index.css';
+@import '../../../../filament/notifications/resources/css/index.css';
+@import '../../../../filament/schemas/resources/css/index.css';
+@import '../../../../filament/tables/resources/css/index.css';
+@import '../../../../filament/widgets/resources/css/index.css';
 
 @import './base.css' layer(base);
 
