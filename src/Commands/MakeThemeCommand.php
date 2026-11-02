@@ -165,7 +165,7 @@ class MakeThemeCommand extends Command
             'classDirectory' => filled($classDirectory) ? $classDirectory : '',
             'filamentThemeCssPath' => $this->escapeCssString(
                 $this->getRelativePath(
-                    (string) InstalledVersions::getInstallPath('filament/filament') . '/resources/css/theme.css',
+                    (string) InstalledVersions::getInstallPath('ndkedrov/hub-filament-panels') . '/resources/css/theme.css',
                     dirname($cssFilePath),
                 ),
             ),
