@@ -72,7 +72,7 @@ class Cluster extends Page
      * @return array<string, string>
      */
     #[Unexposed]
-    public static function unshiftClusterBreadcrumbs(array $breadcrumbs): array
+    public static function prependClusterBreadcrumbs(array $breadcrumbs): array
     {
         $clusterBreadcrumb = static::getClusterBreadcrumb();
 
@@ -86,8 +86,20 @@ class Cluster extends Page
         ];
     }
 
+    /**
+     * @deprecated Use `prependClusterBreadcrumbs()` instead.
+     *
+     * @param  array<string, string>  $breadcrumbs
+     * @return array<string, string>
+     */
     #[Unexposed]
-    public static function getNavigationLabel(): string | Htmlable
+    public static function unshiftClusterBreadcrumbs(array $breadcrumbs): array
+    {
+        return static::prependClusterBreadcrumbs($breadcrumbs);
+    }
+
+    #[Unexposed]
+    public static function getNavigationLabel(): string|Htmlable
     {
         return static::$navigationLabel ?? static::$title ?? str(class_basename(static::class))
             ->beforeLast('Cluster')
@@ -109,7 +121,7 @@ class Cluster extends Page
     #[Unexposed]
     public static function prependClusterSlug(Panel $panel, string $slug): string
     {
-        return static::getSlug($panel) . "/{$slug}";
+        return static::getSlug($panel)."/{$slug}";
     }
 
     #[Unexposed]
@@ -144,7 +156,7 @@ class Cluster extends Page
     #[Unexposed]
     public static function getNavigationItemActiveRoutePattern(): string
     {
-        return static::getRouteName() . '.*';
+        return static::getRouteName().'.*';
     }
 
     #[Unexposed]

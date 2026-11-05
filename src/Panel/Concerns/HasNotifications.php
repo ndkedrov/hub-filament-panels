@@ -9,20 +9,20 @@ use Livewire\Component;
 
 trait HasNotifications
 {
-    protected bool | Closure $hasDatabaseNotifications = false;
+    protected bool|Closure $hasDatabaseNotifications = false;
 
-    protected bool | Closure $hasLazyLoadedDatabaseNotifications = true;
+    protected bool|Closure $hasLazyLoadedDatabaseNotifications = true;
 
-    protected string | Closure | null $databaseNotificationsLivewireComponent = null;
+    protected string|Closure|null $databaseNotificationsLivewireComponent = null;
 
-    protected string | Closure | null $databaseNotificationsPolling = '30s';
+    protected string|Closure|null $databaseNotificationsPollingInterval = '30s';
 
-    protected DatabaseNotificationsPosition | Closure | null $databaseNotificationsPosition = null;
+    protected DatabaseNotificationsPosition|Closure|null $databaseNotificationsPosition = null;
 
     /**
      * @param  class-string<Component> | Closure | null  $livewireComponent
      */
-    public function databaseNotifications(bool | Closure $condition = true, string | Closure | null $livewireComponent = null, bool | Closure $isLazy = true, DatabaseNotificationsPosition | Closure | null $position = null): static
+    public function databaseNotifications(bool|Closure $condition = true, string|Closure|null $livewireComponent = null, bool|Closure $isLazy = true, DatabaseNotificationsPosition|Closure|null $position = null): static
     {
         $this->hasDatabaseNotifications = $condition;
         $this->databaseNotificationsLivewireComponent($livewireComponent);
@@ -35,25 +35,33 @@ trait HasNotifications
     /**
      * @param  class-string<Component> | Closure | null  $component
      */
-    public function databaseNotificationsLivewireComponent(string | Closure | null $component): static
+    public function databaseNotificationsLivewireComponent(string|Closure|null $component): static
     {
         $this->databaseNotificationsLivewireComponent = $component;
 
         return $this;
     }
 
-    public function lazyLoadedDatabaseNotifications(bool | Closure $condition = true): static
+    public function lazyLoadedDatabaseNotifications(bool|Closure $condition = true): static
     {
         $this->hasLazyLoadedDatabaseNotifications = $condition;
 
         return $this;
     }
 
-    public function databaseNotificationsPolling(string | Closure | null $interval): static
+    public function databaseNotificationsPollingInterval(string|Closure|null $interval): static
     {
-        $this->databaseNotificationsPolling = $interval;
+        $this->databaseNotificationsPollingInterval = $interval;
 
         return $this;
+    }
+
+    /**
+     * @deprecated Use `databaseNotificationsPollingInterval()` instead.
+     */
+    public function databaseNotificationsPolling(string|Closure|null $interval): static
+    {
+        return $this->databaseNotificationsPollingInterval($interval);
     }
 
     public function hasDatabaseNotifications(): bool
@@ -76,7 +84,7 @@ trait HasNotifications
 
     public function getDatabaseNotificationsPollingInterval(): ?string
     {
-        return $this->evaluate($this->databaseNotificationsPolling);
+        return $this->evaluate($this->databaseNotificationsPollingInterval);
     }
 
     public function getDatabaseNotificationsPosition(): DatabaseNotificationsPosition

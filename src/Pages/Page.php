@@ -56,15 +56,15 @@ abstract class Page extends BasePage
      */
     protected static ?string $configurationClass = null;
 
-    protected static string | UnitEnum | null $navigationGroup = null;
+    protected static string|UnitEnum|null $navigationGroup = null;
 
-    protected static string | Htmlable | null $navigationBadgeTooltip = null;
+    protected static string|Htmlable|null $navigationBadgeTooltip = null;
 
     protected static ?string $navigationParentItem = null;
 
-    protected static string | BackedEnum | null $navigationIcon = null;
+    protected static string|BackedEnum|null $navigationIcon = null;
 
-    protected static string | BackedEnum | null $activeNavigationIcon = null;
+    protected static string|BackedEnum|null $activeNavigationIcon = null;
 
     protected static ?string $navigationLabel = null;
 
@@ -162,7 +162,7 @@ abstract class Page extends BasePage
                 ->parentItem(static::getNavigationParentItem())
                 ->icon(static::getNavigationIcon())
                 ->activeIcon(static::getActiveNavigationIcon())
-                ->isActiveWhen(fn (): bool => original_request()->routeIs($activeRoutePattern))
+                ->activeWhen(fn (): bool => original_request()->routeIs($activeRoutePattern))
                 ->sort(static::getNavigationSort())
                 ->badge(static::getNavigationBadge(), color: static::getNavigationBadgeColor())
                 ->badgeTooltip(static::getNavigationBadgeTooltip())
@@ -174,7 +174,7 @@ abstract class Page extends BasePage
      * @return string | array<string>
      */
     #[Unexposed]
-    public static function getNavigationItemActiveRoutePattern(): string | array
+    public static function getNavigationItemActiveRoutePattern(): string|array
     {
         return static::getRouteName();
     }
@@ -184,7 +184,7 @@ abstract class Page extends BasePage
     {
         $panel ??= Filament::getCurrentOrDefaultPanel();
 
-        $routeName = 'pages.' . static::getRelativeRouteName($panel);
+        $routeName = 'pages.'.static::getRelativeRouteName($panel);
         $routeName = static::prependClusterRouteBaseName($panel, $routeName);
 
         return $panel->generateRouteName($routeName);
@@ -216,7 +216,7 @@ abstract class Page extends BasePage
         }
 
         $breadcrumbs = filled($cluster = static::getCluster())
-            ? $cluster::unshiftClusterBreadcrumbs([])
+            ? $cluster::prependClusterBreadcrumbs([])
             : [];
 
         if ($breadcrumb !== null) {
@@ -364,13 +364,13 @@ abstract class Page extends BasePage
     }
 
     #[Unexposed]
-    public static function getNavigationGroup(): string | UnitEnum | null
+    public static function getNavigationGroup(): string|UnitEnum|null
     {
         return static::$navigationGroup;
     }
 
     #[Unexposed]
-    public static function navigationGroup(string | UnitEnum | null $group): void
+    public static function navigationGroup(string|UnitEnum|null $group): void
     {
         static::$navigationGroup = $group;
     }
@@ -388,25 +388,25 @@ abstract class Page extends BasePage
     }
 
     #[Unexposed]
-    public static function getNavigationIcon(): string | BackedEnum | Htmlable | null
+    public static function getNavigationIcon(): string|BackedEnum|Htmlable|null
     {
         return static::$navigationIcon;
     }
 
     #[Unexposed]
-    public static function navigationIcon(string | BackedEnum $icon): void
+    public static function navigationIcon(string|BackedEnum $icon): void
     {
         static::$navigationIcon = $icon;
     }
 
     #[Unexposed]
-    public static function getActiveNavigationIcon(): string | BackedEnum | Htmlable | null
+    public static function getActiveNavigationIcon(): string|BackedEnum|Htmlable|null
     {
         return static::$activeNavigationIcon ?? static::getNavigationIcon();
     }
 
     #[Unexposed]
-    public static function getNavigationLabel(): string | Htmlable
+    public static function getNavigationLabel(): string|Htmlable
     {
         return static::$navigationLabel ?? static::$title ?? str(class_basename(static::class))
             ->kebab()
@@ -421,7 +421,7 @@ abstract class Page extends BasePage
     }
 
     #[Unexposed]
-    public static function getNavigationBadgeTooltip(): string | Htmlable | null
+    public static function getNavigationBadgeTooltip(): string|Htmlable|null
     {
         return static::$navigationBadgeTooltip;
     }
@@ -430,7 +430,7 @@ abstract class Page extends BasePage
      * @return string | array<string> | null
      */
     #[Unexposed]
-    public static function getNavigationBadgeColor(): string | array | null
+    public static function getNavigationBadgeColor(): string|array|null
     {
         return null;
     }
@@ -494,7 +494,7 @@ abstract class Page extends BasePage
      * @return int | array<string, ?int>
      */
     #[Unexposed]
-    public function getHeaderWidgetsColumns(): int | array
+    public function getHeaderWidgetsColumns(): int|array
     {
         return 2;
     }
@@ -526,14 +526,14 @@ abstract class Page extends BasePage
      */
     protected function filterVisibleWidgets(array $widgets): array
     {
-        return array_filter($widgets, fn (string | WidgetConfiguration $widget): bool => $this->normalizeWidgetClass($widget)::canView());
+        return array_filter($widgets, fn (string|WidgetConfiguration $widget): bool => $this->normalizeWidgetClass($widget)::canView());
     }
 
     /**
      * @param  class-string<Widget> | WidgetConfiguration  $widget
      * @return class-string<Widget>
      */
-    protected function normalizeWidgetClass(string | WidgetConfiguration $widget): string
+    protected function normalizeWidgetClass(string|WidgetConfiguration $widget): string
     {
         if ($widget instanceof WidgetConfiguration) {
             return $widget->widget;
@@ -546,7 +546,7 @@ abstract class Page extends BasePage
      * @return int | array<string, ?int>
      */
     #[Unexposed]
-    public function getFooterWidgetsColumns(): int | array
+    public function getFooterWidgetsColumns(): int|array
     {
         return 2;
     }
@@ -626,8 +626,8 @@ abstract class Page extends BasePage
     {
         return collect($widgets)
             ->values()
-            ->filter(fn (string | WidgetConfiguration $widget): bool => $this->normalizeWidgetClass($widget)::canView())
-            ->map(fn (string | WidgetConfiguration $widget, int $widgetKey): Livewire => Livewire::make(
+            ->filter(fn (string|WidgetConfiguration $widget): bool => $this->normalizeWidgetClass($widget)::canView())
+            ->map(fn (string|WidgetConfiguration $widget, int $widgetKey): Livewire => Livewire::make(
                 $widgetClass = $this->normalizeWidgetClass($widget),
                 fn (): array => [
                     ...$this->getWidgetData(),
@@ -681,7 +681,7 @@ abstract class Page extends BasePage
     public static function make(string $key = 'default'): PageConfiguration
     {
         if (! static::$configurationClass) {
-            throw new Exception('Page ' . static::class . ' does not define a $configurationClass.');
+            throw new Exception('Page '.static::class.' does not define a $configurationClass.');
         }
 
         return static::$configurationClass::make(static::class, $key);
@@ -722,7 +722,7 @@ abstract class Page extends BasePage
         $configuration = Filament::getCurrentPanel()->getPageConfiguration(static::class, $key);
 
         if (! $configuration) {
-            throw new Exception("Configuration '{$key}' not found for page " . static::class);
+            throw new Exception("Configuration '{$key}' not found for page ".static::class);
         }
 
         $previousKey = Filament::getCurrentPageConfigurationKey();

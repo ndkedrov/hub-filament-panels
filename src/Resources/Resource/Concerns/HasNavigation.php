@@ -19,15 +19,15 @@ trait HasNavigation
 
     protected static bool $shouldRegisterNavigation = true;
 
-    protected static string | Htmlable | null $navigationBadgeTooltip = null;
+    protected static string|Htmlable|null $navigationBadgeTooltip = null;
 
-    protected static string | UnitEnum | null $navigationGroup = null;
+    protected static string|UnitEnum|null $navigationGroup = null;
 
     protected static ?string $navigationParentItem = null;
 
-    protected static string | BackedEnum | null $navigationIcon = null;
+    protected static string|BackedEnum|null $navigationIcon = null;
 
-    protected static string | BackedEnum | null $activeNavigationIcon = null;
+    protected static string|BackedEnum|null $activeNavigationIcon = null;
 
     protected static ?string $navigationLabel = null;
 
@@ -73,7 +73,7 @@ trait HasNavigation
                 ->parentItem(static::getNavigationParentItem())
                 ->icon(static::getNavigationIcon())
                 ->activeIcon(static::getActiveNavigationIcon())
-                ->isActiveWhen(fn (): bool => original_request()->routeIs($activeRoutePattern))
+                ->activeWhen(fn (): bool => original_request()->routeIs($activeRoutePattern))
                 ->badge(static::getNavigationBadge(), color: static::getNavigationBadgeColor())
                 ->badgeTooltip(static::getNavigationBadgeTooltip())
                 ->sort(static::getNavigationSort())
@@ -84,9 +84,9 @@ trait HasNavigation
     /**
      * @return string | array<string>
      */
-    public static function getNavigationItemActiveRoutePattern(): string | array
+    public static function getNavigationItemActiveRoutePattern(): string|array
     {
-        return static::getRouteBaseName() . '.*';
+        return static::getRouteBaseName().'.*';
     }
 
     public static function getSubNavigationPosition(): SubNavigationPosition
@@ -102,7 +102,7 @@ trait HasNavigation
         return Filament::getSubNavigationPosition();
     }
 
-    public static function getNavigationGroup(): string | UnitEnum | null
+    public static function getNavigationGroup(): string|UnitEnum|null
     {
         return static::$navigationGroup;
     }
@@ -112,7 +112,7 @@ trait HasNavigation
         return static::$navigationParentItem;
     }
 
-    public static function navigationGroup(string | UnitEnum | null $group): void
+    public static function navigationGroup(string|UnitEnum|null $group): void
     {
         static::$navigationGroup = $group;
     }
@@ -122,22 +122,22 @@ trait HasNavigation
         static::$navigationParentItem = $item;
     }
 
-    public static function getNavigationIcon(): string | BackedEnum | Htmlable | null
+    public static function getNavigationIcon(): string|BackedEnum|Htmlable|null
     {
         return static::$navigationIcon;
     }
 
-    public static function navigationIcon(string | BackedEnum $icon): void
+    public static function navigationIcon(string|BackedEnum $icon): void
     {
         static::$navigationIcon = $icon;
     }
 
-    public static function getActiveNavigationIcon(): string | BackedEnum | Htmlable | null
+    public static function getActiveNavigationIcon(): string|BackedEnum|Htmlable|null
     {
         return static::$activeNavigationIcon ?? static::getNavigationIcon();
     }
 
-    public static function getNavigationLabel(): string | Htmlable
+    public static function getNavigationLabel(): string|Htmlable
     {
         return static::$navigationLabel ?? static::getTitleCasePluralModelLabel();
     }
@@ -147,7 +147,7 @@ trait HasNavigation
         return null;
     }
 
-    public static function getNavigationBadgeTooltip(): string | Htmlable | null
+    public static function getNavigationBadgeTooltip(): string|Htmlable|null
     {
         return static::$navigationBadgeTooltip;
     }
@@ -155,7 +155,7 @@ trait HasNavigation
     /**
      * @return string | array<string> | null
      */
-    public static function getNavigationBadgeColor(): string | array | null
+    public static function getNavigationBadgeColor(): string|array|null
     {
         return null;
     }

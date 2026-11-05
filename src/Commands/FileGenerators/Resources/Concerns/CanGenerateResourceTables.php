@@ -82,11 +82,11 @@ trait CanGenerateResourceTables
                     {$this->outputTableFilters()}
                 ]){$headerActionsOutput}
                 ->recordActions([
-                    {$this->outputTableActions()}
+                    {$this->outputTableRecordActions()}
                 ])
                 ->toolbarActions([
                     {$this->simplifyFqn(BulkActionGroup::class)}::make([
-                        {$this->outputTableMethodBulkActions()}
+                        {$this->outputTableBulkActions()}
                     ]),
                 ]){$modifyQueryOutput};
             PHP;
@@ -115,7 +115,7 @@ trait CanGenerateResourceTables
                 PHP, [$recordTitleAttribute]);
         }
 
-        return implode(PHP_EOL . '        ', $columns);
+        return implode(PHP_EOL.'        ', $columns);
     }
 
     /**
@@ -144,7 +144,7 @@ trait CanGenerateResourceTables
             return '//';
         }
 
-        return implode(PHP_EOL . '        ', array_map(
+        return implode(PHP_EOL.'        ', array_map(
             fn (string $filter) => "{$this->simplifyFqn($filter)}::make(),",
             $filters,
         ));
@@ -188,13 +188,23 @@ trait CanGenerateResourceTables
             return null;
         }
 
-        return implode(PHP_EOL . '        ', array_map(
+        return implode(PHP_EOL.'        ', array_map(
             fn (string $action) => "{$this->simplifyFqn($action)}::make(),",
             $actions,
         ));
     }
 
     /**
+     * @return array<class-string<Action>>
+     */
+    public function getTableRecordActions(): array
+    {
+        return $this->getTableActions();
+    }
+
+    /**
+     * @deprecated Use `getTableRecordActions()` instead.
+     *
      * @return array<class-string<Action>>
      */
     public function getTableActions(): array
@@ -251,11 +261,19 @@ trait CanGenerateResourceTables
         return $this->isSimple();
     }
 
+    public function outputTableRecordActions(): string
+    {
+        return $this->outputTableActions();
+    }
+
+    /**
+     * @deprecated Use `outputTableRecordActions()` instead.
+     */
     public function outputTableActions(): string
     {
-        return implode(PHP_EOL . '        ', array_map(
+        return implode(PHP_EOL.'        ', array_map(
             fn (string $action) => "{$this->simplifyFqn($action)}::make(),",
-            $this->getTableActions(),
+            $this->getTableRecordActions(),
         ));
     }
 
@@ -288,9 +306,17 @@ trait CanGenerateResourceTables
         return $actions;
     }
 
+    public function outputTableBulkActions(): string
+    {
+        return $this->outputTableMethodBulkActions();
+    }
+
+    /**
+     * @deprecated Use `outputTableBulkActions()` instead.
+     */
     public function outputTableMethodBulkActions(): string
     {
-        return implode(PHP_EOL . '            ', array_map(
+        return implode(PHP_EOL.'            ', array_map(
             fn (string $action) => "{$this->simplifyFqn($action)}::make(),",
             $this->getTableBulkActions(),
         ));

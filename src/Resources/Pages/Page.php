@@ -82,7 +82,7 @@ abstract class Page extends BasePage
         return $record;
     }
 
-    protected function resolveRecord(int | string $key): Model
+    protected function resolveRecord(int|string $key): Model
     {
         $this->mountParentRecord();
 
@@ -131,7 +131,7 @@ abstract class Page extends BasePage
 
         $routeBaseName = static::getResource()::getRouteBaseName($panel);
 
-        return $routeBaseName . '.' . static::getResourcePageName();
+        return $routeBaseName.'.'.static::getResourcePageName();
     }
 
     /**
@@ -147,7 +147,7 @@ abstract class Page extends BasePage
                 ->parentItem(static::getNavigationParentItem())
                 ->icon(static::getNavigationIcon())
                 ->activeIcon(static::getActiveNavigationIcon())
-                ->isActiveWhen(fn (): bool => original_request()->routeIs(static::getNavigationItemActiveRoutePattern()))
+                ->activeWhen(fn (): bool => original_request()->routeIs(static::getNavigationItemActiveRoutePattern()))
                 ->sort(static::getNavigationSort())
                 ->badge(static::getNavigationBadge(), color: static::getNavigationBadgeColor())
                 ->url(static::getNavigationUrl($urlParameters)),
@@ -158,7 +158,7 @@ abstract class Page extends BasePage
      * @return string | array<string>
      */
     #[Unexposed]
-    public static function getNavigationItemActiveRoutePattern(): string | array
+    public static function getNavigationItemActiveRoutePattern(): string|array
     {
         return static::getRouteName();
     }
@@ -197,7 +197,7 @@ abstract class Page extends BasePage
             return $pageName;
         }
 
-        throw new LogicException('Page [' . static::class . '] is not registered to the resource [' . static::getResource() . '].');
+        throw new LogicException('Page ['.static::class.'] is not registered to the resource ['.static::getResource().'].');
     }
 
     #[Unexposed]
@@ -314,7 +314,7 @@ abstract class Page extends BasePage
         }
 
         if (filled($cluster = static::getCluster())) {
-            return $cluster::unshiftClusterBreadcrumbs($breadcrumbs);
+            return $cluster::prependClusterBreadcrumbs($breadcrumbs);
         }
 
         return $breadcrumbs;

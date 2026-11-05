@@ -4,6 +4,7 @@ namespace Filament\Panel\Concerns;
 
 use Closure;
 use Filament\Support\Facades\FilamentView;
+use Filament\Support\View\ViewManager;
 
 trait HasRenderHooks
 {
@@ -15,8 +16,10 @@ trait HasRenderHooks
     /**
      * @param  string | array<string> | null  $scopes
      */
-    public function renderHook(string $name, Closure $hook, string | array | null $scopes = null): static
+    public function renderHook(string $name, Closure $hook, string|array|null $scopes = null): static
     {
+        $name = ViewManager::normalizeRenderHookName($name);
+
         if ($scopes === null) {
             $scopes = [''];
         }

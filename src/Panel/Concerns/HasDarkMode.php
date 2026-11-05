@@ -6,21 +6,21 @@ use Closure;
 
 trait HasDarkMode
 {
-    protected bool | Closure $hasDarkMode = true;
+    protected bool|Closure $hasDarkMode = true;
 
-    protected bool | Closure $hasDarkModeForced = false;
+    protected bool|Closure $isDarkModeForced = false;
 
-    protected bool | Closure $hasThemeSwitcher = true;
+    protected bool|Closure $hasThemeSwitcher = true;
 
-    public function darkMode(bool | Closure $condition = true, bool | Closure $isForced = false): static
+    public function darkMode(bool|Closure $condition = true, bool|Closure $isForced = false): static
     {
         $this->hasDarkMode = $condition;
-        $this->hasDarkModeForced = $isForced;
+        $this->isDarkModeForced = $isForced;
 
         return $this;
     }
 
-    public function themeSwitcher(bool | Closure $condition = true): static
+    public function themeSwitcher(bool|Closure $condition = true): static
     {
         $this->hasThemeSwitcher = $condition;
 
@@ -32,9 +32,17 @@ trait HasDarkMode
         return (bool) $this->evaluate($this->hasDarkMode);
     }
 
+    /**
+     * @deprecated Use `isDarkModeForced()` instead.
+     */
     public function hasDarkModeForced(): bool
     {
-        return (bool) $this->evaluate($this->hasDarkModeForced);
+        return $this->isDarkModeForced();
+    }
+
+    public function isDarkModeForced(): bool
+    {
+        return (bool) $this->evaluate($this->isDarkModeForced);
     }
 
     public function hasThemeSwitcher(): bool

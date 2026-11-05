@@ -23,21 +23,21 @@ use Illuminate\Support\Str;
 
 trait HasAuth
 {
-    protected string | Closure $emailVerifiedMiddlewareName = 'verified';
+    protected string|Closure $emailVerifiedMiddlewareName = 'verified';
 
-    protected string | Closure $multiFactorAuthenticationRequiredMiddlewareName = EnsureMultiFactorAuthenticationIsEnabled::class;
-
-    /**
-     * @var string | Closure | array<class-string, string> | null
-     */
-    protected string | Closure | array | null $emailVerificationRouteAction = null;
+    protected string|Closure $multiFactorAuthenticationRequiredMiddlewareName = EnsureMultiFactorAuthenticationIsEnabled::class;
 
     /**
-     * @var string | Closure | array<class-string, string> | null
+     * @var string | Closure | array<array-key, mixed> | null
      */
-    protected string | Closure | array | null $setUpRequiredMultiFactorAuthenticationRouteAction = null;
+    protected string|Closure|array|null $emailVerificationPromptRouteAction = null;
 
-    protected bool | Closure $hasEmailChangeVerification = false;
+    /**
+     * @var string | Closure | array<array-key, mixed> | null
+     */
+    protected string|Closure|array|null $setUpRequiredMultiFactorAuthenticationRouteAction = null;
+
+    protected bool|Closure $hasEmailChangeVerification = false;
 
     protected string $emailVerificationPromptRouteSlug = 'prompt';
 
@@ -53,35 +53,35 @@ trait HasAuth
 
     protected string $emailChangeVerificationRoutePrefix = 'email-change-verification';
 
-    protected bool | Closure $isEmailVerificationRequired = false;
+    protected bool|Closure $isEmailVerificationRequired = false;
 
-    protected bool | Closure $isMultiFactorAuthenticationRequired = false;
+    protected bool|Closure $isMultiFactorAuthenticationRequired = false;
 
     /**
-     * @var string | Closure | array<class-string, string> | null
+     * @var string | Closure | array<array-key, mixed> | null
      */
-    protected string | Closure | array | null $loginRouteAction = null;
+    protected string|Closure|array|null $loginRouteAction = null;
 
     protected string $loginRouteSlug = 'login';
 
     /**
-     * @var string | Closure | array<class-string, string> | null
+     * @var string | Closure | array<array-key, mixed> | null
      */
-    protected string | Closure | array | null $registrationRouteAction = null;
+    protected string|Closure|array|null $registrationRouteAction = null;
 
     protected string $registrationRouteSlug = 'register';
 
     /**
-     * @var string | Closure | array<class-string, string> | null
+     * @var string | Closure | array<array-key, mixed> | null
      */
-    protected string | Closure | array | null $requestPasswordResetRouteAction = null;
+    protected string|Closure|array|null $requestPasswordResetRouteAction = null;
 
     protected string $requestPasswordResetRouteSlug = 'request';
 
     /**
-     * @var string | Closure | array<class-string, string> | null
+     * @var string | Closure | array<array-key, mixed> | null
      */
-    protected string | Closure | array | null $resetPasswordRouteAction = null;
+    protected string|Closure|array|null $resetPasswordRouteAction = null;
 
     protected string $resetPasswordRouteSlug = 'reset';
 
@@ -95,27 +95,27 @@ trait HasAuth
 
     protected ?string $authPasswordBroker = null;
 
-    protected bool | Closure $arePasswordsRevealable = true;
+    protected bool|Closure $arePasswordsRevealable = true;
 
     /**
      * @var array<MultiFactorAuthenticationProvider> | MultiFactorAuthenticationProvider | Closure
      */
-    protected array | MultiFactorAuthenticationProvider | Closure $multiFactorAuthenticationProviders = [];
+    protected array|MultiFactorAuthenticationProvider|Closure $multiFactorAuthenticationProviders = [];
 
-    protected bool | Closure $isAuthorizationStrict = false;
+    protected bool|Closure $isAuthorizationStrict = false;
 
     /**
-     * @param  string | Closure | array<class-string, string> | null  $promptAction
+     * @param  string | Closure | array<array-key, mixed> | null  $promptAction
      */
-    public function emailVerification(string | Closure | array | null $promptAction = EmailVerificationPrompt::class, bool | Closure $isRequired = true): static
+    public function emailVerification(string|Closure|array|null $promptAction = EmailVerificationPrompt::class, bool|Closure $isRequired = true): static
     {
-        $this->emailVerificationRouteAction = $promptAction;
+        $this->emailVerificationPromptRouteAction = $promptAction;
         $this->requiresEmailVerification($isRequired);
 
         return $this;
     }
 
-    public function emailChangeVerification(bool | Closure $condition = true): static
+    public function emailChangeVerification(bool|Closure $condition = true): static
     {
         $this->hasEmailChangeVerification = $condition;
 
@@ -171,28 +171,28 @@ trait HasAuth
         return $this;
     }
 
-    public function emailVerifiedMiddlewareName(string | Closure $name): static
+    public function emailVerifiedMiddlewareName(string|Closure $name): static
     {
         $this->emailVerifiedMiddlewareName = $name;
 
         return $this;
     }
 
-    public function multiFactorAuthenticationRequiredMiddlewareName(string | Closure $name): static
+    public function multiFactorAuthenticationRequiredMiddlewareName(string|Closure $name): static
     {
         $this->multiFactorAuthenticationRequiredMiddlewareName = $name;
 
         return $this;
     }
 
-    public function requiresEmailVerification(bool | Closure $condition = true): static
+    public function requiresEmailVerification(bool|Closure $condition = true): static
     {
         $this->isEmailVerificationRequired = $condition;
 
         return $this;
     }
 
-    public function requiresMultiFactorAuthentication(bool | Closure $condition = true): static
+    public function requiresMultiFactorAuthentication(bool|Closure $condition = true): static
     {
         $this->isMultiFactorAuthenticationRequired = $condition;
 
@@ -200,9 +200,9 @@ trait HasAuth
     }
 
     /**
-     * @param  string | Closure | array<class-string, string> | null  $action
+     * @param  string | Closure | array<array-key, mixed> | null  $action
      */
-    public function login(string | Closure | array | null $action = Login::class): static
+    public function login(string|Closure|array|null $action = Login::class): static
     {
         $this->loginRouteAction = $action;
 
@@ -217,10 +217,10 @@ trait HasAuth
     }
 
     /**
-     * @param  string | Closure | array<class-string, string> | null  $requestAction
-     * @param  string | Closure | array<class-string, string> | null  $resetAction
+     * @param  string | Closure | array<array-key, mixed> | null  $requestAction
+     * @param  string | Closure | array<array-key, mixed> | null  $resetAction
      */
-    public function passwordReset(string | Closure | array | null $requestAction = RequestPasswordReset::class, string | Closure | array | null $resetAction = ResetPassword::class): static
+    public function passwordReset(string|Closure|array|null $requestAction = RequestPasswordReset::class, string|Closure|array|null $resetAction = ResetPassword::class): static
     {
         $this->requestPasswordResetRouteAction = $requestAction;
         $this->resetPasswordRouteAction = $resetAction;
@@ -228,18 +228,34 @@ trait HasAuth
         return $this;
     }
 
-    public function passwordResetRequestRouteSlug(string $slug): static
+    public function requestPasswordResetRouteSlug(string $slug): static
     {
         $this->requestPasswordResetRouteSlug = $slug;
 
         return $this;
     }
 
-    public function passwordResetRouteSlug(string $slug): static
+    /**
+     * @deprecated Use `requestPasswordResetRouteSlug()` instead.
+     */
+    public function passwordResetRequestRouteSlug(string $slug): static
+    {
+        return $this->requestPasswordResetRouteSlug($slug);
+    }
+
+    public function resetPasswordRouteSlug(string $slug): static
     {
         $this->resetPasswordRouteSlug = $slug;
 
         return $this;
+    }
+
+    /**
+     * @deprecated Use `resetPasswordRouteSlug()` instead.
+     */
+    public function passwordResetRouteSlug(string $slug): static
+    {
+        return $this->resetPasswordRouteSlug($slug);
     }
 
     public function passwordResetRoutePrefix(string $prefix): static
@@ -250,9 +266,9 @@ trait HasAuth
     }
 
     /**
-     * @param  string | Closure | array<class-string, string> | null  $action
+     * @param  string | Closure | array<array-key, mixed> | null  $action
      */
-    public function registration(string | Closure | array | null $action = Register::class): static
+    public function registration(string|Closure|array|null $action = Register::class): static
     {
         $this->registrationRouteAction = $action;
 
@@ -413,7 +429,7 @@ trait HasAuth
     /**
      * @param  array<mixed>  $parameters
      */
-    public function getVerifyEmailUrl(MustVerifyEmail | Model | Authenticatable $user, array $parameters = []): string
+    public function getVerifyEmailUrl(MustVerifyEmail|Model|Authenticatable $user, array $parameters = []): string
     {
         return URL::temporarySignedRoute(
             $this->generateRouteName('auth.email-verification.verify'),
@@ -429,7 +445,7 @@ trait HasAuth
     /**
      * @param  array<mixed>  $parameters
      */
-    public function getVerifyEmailChangeUrl(MustVerifyEmail | Model | Authenticatable $user, string $newEmail, array $parameters = []): string
+    public function getVerifyEmailChangeUrl(MustVerifyEmail|Model|Authenticatable $user, string $newEmail, array $parameters = []): string
     {
         return URL::temporarySignedRoute(
             $this->generateRouteName('auth.email-change-verification.verify'),
@@ -445,7 +461,7 @@ trait HasAuth
     /**
      * @param  array<mixed>  $parameters
      */
-    public function getBlockEmailChangeVerificationUrl(MustVerifyEmail | Model | Authenticatable $user, string $newEmail, string $verificationSignature, array $parameters = []): string
+    public function getBlockEmailChangeVerificationUrl(MustVerifyEmail|Model|Authenticatable $user, string $newEmail, string $verificationSignature, array $parameters = []): string
     {
         return URL::temporarySignedRoute(
             $this->generateRouteName('auth.email-change-verification.block-verification'),
@@ -462,7 +478,7 @@ trait HasAuth
     /**
      * @param  array<mixed>  $parameters
      */
-    public function getResetPasswordUrl(string $token, CanResetPassword | Model | Authenticatable $user, array $parameters = []): string
+    public function getResetPasswordUrl(string $token, CanResetPassword|Model|Authenticatable $user, array $parameters = []): string
     {
         return URL::signedRoute(
             $this->generateRouteName('auth.password-reset.reset'),
@@ -505,17 +521,17 @@ trait HasAuth
     }
 
     /**
-     * @return string | Closure | array<class-string, string> | null
+     * @return string | Closure | array<array-key, mixed> | null
      */
-    public function getEmailVerificationPromptRouteAction(): string | Closure | array | null
+    public function getEmailVerificationPromptRouteAction(): string|Closure|array|null
     {
-        return $this->emailVerificationRouteAction;
+        return $this->emailVerificationPromptRouteAction;
     }
 
     /**
-     * @return string | Closure | array<class-string, string> | null
+     * @return string | Closure | array<array-key, mixed> | null
      */
-    public function getSetUpRequiredMultiFactorAuthenticationRouteAction(): string | Closure | array | null
+    public function getSetUpRequiredMultiFactorAuthenticationRouteAction(): string|Closure|array|null
     {
         return $this->setUpRequiredMultiFactorAuthenticationRouteAction;
     }
@@ -532,12 +548,12 @@ trait HasAuth
 
     public function getEmailVerificationRouteSlug(string $suffix): string
     {
-        return Str::start($this->emailVerificationRouteSlug, '/') . $suffix;
+        return Str::start($this->emailVerificationRouteSlug, '/').$suffix;
     }
 
     public function getEmailChangeVerificationRouteSlug(string $suffix): string
     {
-        return Str::start($this->emailChangeVerificationRouteSlug, '/') . $suffix;
+        return Str::start($this->emailChangeVerificationRouteSlug, '/').$suffix;
     }
 
     public function getEmailVerificationRoutePrefix(): string
@@ -556,9 +572,9 @@ trait HasAuth
     }
 
     /**
-     * @return string | Closure | array<class-string, string> | null
+     * @return string | Closure | array<array-key, mixed> | null
      */
-    public function getLoginRouteAction(): string | Closure | array | null
+    public function getLoginRouteAction(): string|Closure|array|null
     {
         return $this->loginRouteAction;
     }
@@ -569,9 +585,9 @@ trait HasAuth
     }
 
     /**
-     * @return string | Closure | array<class-string, string> | null
+     * @return string | Closure | array<array-key, mixed> | null
      */
-    public function getRegistrationRouteAction(): string | Closure | array | null
+    public function getRegistrationRouteAction(): string|Closure|array|null
     {
         return $this->registrationRouteAction;
     }
@@ -582,9 +598,9 @@ trait HasAuth
     }
 
     /**
-     * @return string | Closure | array<class-string, string> | null
+     * @return string | Closure | array<array-key, mixed> | null
      */
-    public function getRequestPasswordResetRouteAction(): string | Closure | array | null
+    public function getRequestPasswordResetRouteAction(): string|Closure|array|null
     {
         return $this->requestPasswordResetRouteAction;
     }
@@ -595,9 +611,9 @@ trait HasAuth
     }
 
     /**
-     * @return string | Closure | array<class-string, string> | null
+     * @return string | Closure | array<array-key, mixed> | null
      */
-    public function getResetPasswordRouteAction(): string | Closure | array | null
+    public function getResetPasswordRouteAction(): string|Closure|array|null
     {
         return $this->resetPasswordRouteAction;
     }
@@ -647,7 +663,7 @@ trait HasAuth
         return $this->authPasswordBroker;
     }
 
-    public function revealablePasswords(bool | Closure $condition = true): static
+    public function revealablePasswords(bool|Closure $condition = true): static
     {
         $this->arePasswordsRevealable = $condition;
 
@@ -661,9 +677,9 @@ trait HasAuth
 
     /**
      * @param  array<MultiFactorAuthenticationProvider> | MultiFactorAuthenticationProvider | Closure  $providers
-     * @param  string | Closure | array<class-string, string> | null  $setUpRequiredAction
+     * @param  string | Closure | array<array-key, mixed> | null  $setUpRequiredAction
      */
-    public function multiFactorAuthentication(array | MultiFactorAuthenticationProvider | Closure $providers, string | Closure | array | null $setUpRequiredAction = SetUpRequiredMultiFactorAuthentication::class, bool | Closure $isRequired = false): static
+    public function multiFactorAuthentication(array|MultiFactorAuthenticationProvider|Closure $providers, string|Closure|array|null $setUpRequiredAction = SetUpRequiredMultiFactorAuthentication::class, bool|Closure $isRequired = false): static
     {
         $this->multiFactorAuthenticationProviders = $providers;
         $this->setUpRequiredMultiFactorAuthenticationRouteAction = $setUpRequiredAction;
@@ -688,7 +704,7 @@ trait HasAuth
             ->all();
     }
 
-    public function strictAuthorization(bool | Closure $condition = true): static
+    public function strictAuthorization(bool|Closure $condition = true): static
     {
         $this->isAuthorizationStrict = $condition;
 
